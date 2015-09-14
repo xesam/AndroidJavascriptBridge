@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -72,7 +71,7 @@ public class Dispatcher {
                     mWebView.evaluateJavascript(script, new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
-                            Toast.makeText(mWebView.getContext(), value, Toast.LENGTH_SHORT).show();
+
                         }
                     });
                 } else {
