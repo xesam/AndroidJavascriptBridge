@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div {
+            height: 40px;
+            text-align: center;
+        }
+
+        div > button {
+            width: 50%;
+            height: 30px;
+            font-size: 16px;
+        }
+    </style>
+    <script src="java_bridge.js"></script>
+</head>
+<body>
+
+<div>
+    <button id="java_fn_primitive_type">java_fn(primitive_type)</button>
+</div>
+<div>
+    <button id="java_fn_data_object">java_fn(data_object)</button>
+</div>
+<div>
+    <button id="java_fn_function">java_fn(function)</button>
+</div>
+<script>
+    document.getElementById('java_fn_primitive_type').addEventListener('click', function () {
+        bridge.invoke_remote_call('java_fn1', {
+            data: '[string]hello'
+        });
+    }, false);
+
+    document.getElementById('java_fn_data_object').addEventListener('click', function () {
+        bridge.invoke_remote_call('java_fn1', {
+            data: {"key": "value"}
+        });
+    }, false);
+
+    document.getElementById('java_fn_function').addEventListener('click', function () {
+        bridge.invoke_remote_call('java_fn1', {
+            succ: function (data) {
+                console.log('console hello', data);
+            }
+        }, true);
+    }, false);
+
+    window.js_fn = function (data) {
+        console.log('js_fn');
+        console.log(data);
+    }
+</script>
+</body>
+</html>
