@@ -38,9 +38,4 @@ public class LocalCallRequest extends LocalRequest {
     public boolean hasCallback() {
         return callback;
     }
-
-    public void deliveryRemoteCallback(JavascriptBridge javascriptBridge, String callbackMethod, JSONObject requestData) {
-        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(this.getRequestId(), callbackMethod, requestData, null);
-        javascriptBridge.invokeRemoteCallback(remoteRequest);
-    }
 }

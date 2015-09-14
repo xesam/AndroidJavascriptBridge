@@ -5,6 +5,8 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import org.json.JSONObject;
+
 /**
  * Created by xesamguo@gmail.com on 9/10/15.
  */
@@ -51,6 +53,11 @@ public class JavascriptBridge {
 
     public void invokeRemoteCall(RemoteCallRequest remoteRequest) {
         mDispatcher.dispatchRemoteRequest(remoteRequest);
+    }
+
+    public void deliveryRemoteCallback(LocalCallRequest localCallRequest, String callbackMethod, JSONObject requestData) {
+        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getRequestId(), callbackMethod, requestData, null);
+        invokeRemoteCallback(remoteRequest);
     }
 
     public void invokeRemoteCallback(RemoteCallbackRequest remoteRequest) {

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    localCallRequest.deliveryRemoteCallback(javascriptBridge, "succ", jsonObject);
+                    javascriptBridge.deliveryRemoteCallback(localCallRequest, "succ", jsonObject);
                 }
             }
         });
