@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +30,19 @@ public class MainActivity extends AppCompatActivity {
         javascriptBridge.bindWebView(webView);
 
         javascriptBridge.registerLocalRequestHandler("java_fn1", new LocalCallRequest.RequestHandler<Person>() {
+            @Override
+            public Person formJson(String requestString) {
+                Gson gson = new Gson();
+                return gson.fromJson(requestString, Person.class);
+            }
+
+            @Override
+            public void handle(LocalCallRequest localCallRequest, Person data) {
+                Toast.makeText(getApplicationContext(), data.name, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        javascriptBridge.registerLocalRequestHandler("java_fn2", new LocalCallRequest.RequestHandler<Person>() {
 
             @Override
             public Person formJson(String requestString) {
@@ -37,18 +52,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void handle(LocalCallRequest localCallRequest, Person data) {
 
-                Toast.makeText(getApplicationContext(), "java_fn1：" + localCallRequest.getRequestId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "java_fn2：" + localCallRequest.getRequestId(), Toast.LENGTH_SHORT).show();
 
                 if (localCallRequest.hasCallback()) {
+                    javascriptBridge.deliveryRemoteCallback(localCallRequest, "succ", getData());
+                }
+            }
+        });
 
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("name", "xesam");
-                        jsonObject.put("age", 28);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    javascriptBridge.deliveryRemoteCallback(localCallRequest, "succ", jsonObject);
+        javascriptBridge.registerLocalRequestHandler("java_fn3", new LocalCallRequest.RequestHandler<Person>() {
+
+            @Override
+            public Person formJson(String requestString) {
+                Gson gson = new Gson();
+                return gson.fromJson(requestString, Person.class);
+            }
+
+            @Override
+            public void handle(LocalCallRequest localCallRequest, Person data) {
+
+                Toast.makeText(getApplicationContext(), "java_fn3：" + data.name, Toast.LENGTH_SHORT).show();
+
+                if (localCallRequest.hasCallback()) {
+                    javascriptBridge.deliveryRemoteCallback(localCallRequest, null, getData());
                 }
             }
         });
@@ -56,9 +82,25 @@ public class MainActivity extends AppCompatActivity {
         webView.loadUrl("file:///android_asset/java_bridge.html");
 
     }
+
+    public JSONObject getData() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", "xesam");
+            jsonObject.put("blog", "https://github.com/xesam");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
 }
 
 class Person {
     String name;
     String blog;
+
+    public Person(String name, String blog) {
+        this.name = name;
+        this.blog = blog;
+    }
 }

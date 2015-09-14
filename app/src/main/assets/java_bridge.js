@@ -2,15 +2,6 @@
  * Created by xesamguo@gmail.com on 9/10/15.
  */
 
-JavaBridge = {
-    onReceiveRequest: function (data) {
-        console.log(data);
-        data = JSON.parse(data);
-        var s = '{"request_id":350863710,"request_data":{"name":"xesam","age":28},"_callback_id":' + data['request_id'] + ',"_callback_method":"succ"}';
-        bridge.on_receive_request(s);
-    }
-};
-
 window.bridge = (function () {
 
     function Dispatcher() {
@@ -27,7 +18,6 @@ window.bridge = (function () {
 
         dispatch_remote_request: function (remote_request) {
             this._remote_callback[remote_request.request_id] = remote_request;
-            console.log(remote_request.getJsonString());
             JavaBridge.onReceiveRequest(remote_request.getJsonString());
         },
 
@@ -42,18 +32,20 @@ window.bridge = (function () {
                 }
             } else if (local_request.is_callback()) {
                 var cache_request = this._remote_callback[local_request.callback_id];
-                console.log(cache_request);
                 if (cache_request) {
-                    console.log(cache_request['data']);
-                    console.log(local_request);
-                    var callback = cache_request['data'][local_request.callback_method];
-                    console.log(callback);
+                    var callback;
+                    if(local_request.callback_method){
+                        callback = cache_request.data[local_request.callback_method];
+                    }else{
+                        callback = cache_request.data.extra_callback;
+                    }
                     if (callback) {
                         setTimeout(function () {
                             callback(local_request.request_data);
                             delete _this._remote_callback[local_request.callback_id];
                         }, 0);
                     }
+
                 }
 
             }
@@ -95,7 +87,6 @@ window.bridge = (function () {
     /********************************************/
 
     function LocalRequest(request_string) {
-        console.log('LocalRequest:', request_string);
         var request = JSON.parse(request_string);
         this.request_id = request['request_id'];
 
@@ -121,7 +112,9 @@ window.bridge = (function () {
 
     return {
 
-        register_local_request_handler: _dispatcher.register_local_request_handler,
+        register_local_request_handler: function (request_method, request_handler) {
+            _dispatcher.register_local_request_handler(request_method, request_handler);
+        },
 
         invoke_remote_call: function (remote_method, remote_data, has_data_callback, extra_callback) {
             var remoteRequest = new RemoteCallRequest(remote_method, remote_data, has_data_callback, extra_callback);

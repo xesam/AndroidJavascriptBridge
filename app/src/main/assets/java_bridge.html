@@ -5,14 +5,14 @@
     <title></title>
     <style>
         div {
-            height: 40px;
-            text-align: center;
+        height: 40px;
+        text-align: center;
         }
 
         div > button {
-            width: 50%;
-            height: 30px;
-            font-size: 16px;
+        width: 50%;
+        height: 30px;
+        font-size: 16px;
         }
     </style>
     <script src="java_bridge.js"></script>
@@ -20,39 +20,47 @@
 <body>
 
 <div>
-    <button id="java_fn_primitive_type">java_fn(primitive_type)</button>
+    <button id="call_java_1">call_java_1</button>
 </div>
 <div>
-    <button id="java_fn_data_object">java_fn(data_object)</button>
+    <button id="call_java_2">call_java_2</button>
 </div>
 <div>
-    <button id="java_fn_function">java_fn(function)</button>
+    <button id="call_java_3">call_java_3</button>
 </div>
 <script>
-    document.getElementById('java_fn_primitive_type').addEventListener('click', function () {
+    document.getElementById('call_java_1').addEventListener('click', function () {
         bridge.invoke_remote_call('java_fn1', {
-            data: '[string]hello'
+            name: 'xesam'
         });
     }, false);
 
-    document.getElementById('java_fn_data_object').addEventListener('click', function () {
-        bridge.invoke_remote_call('java_fn1', {
-            data: {"key": "value"}
-        });
-    }, false);
-
-    document.getElementById('java_fn_function').addEventListener('click', function () {
-        bridge.invoke_remote_call('java_fn1', {
-            succ: function (data) {
-                console.log('console hello', data);
+    document.getElementById('call_java_2').addEventListener('click', function () {
+        bridge.invoke_remote_call('java_fn2', {
+            succ: function (resp) {
+                console.log("call_java_2:" + resp.name);
             }
         }, true);
     }, false);
 
-    window.js_fn = function (data) {
-        console.log('js_fn');
-        console.log(data);
-    }
+    document.getElementById('call_java_3').addEventListener('click', function () {
+        bridge.invoke_remote_call('java_fn3', {
+            name: 'xesam'
+        }, false, function (resp) {
+            console.log("call_java_3:" + resp.name);
+        });
+    }, false);
+
+    bridge.register_local_request_handler('js_fn1', function (data) {
+        console.log(data.name);
+    });
+
+    bridge.register_local_request_handler('js_fn2', function (data) {
+        bridge.invoke_remote_call('java_fn1', {
+            name: data.name
+        });
+    });
+
 </script>
 </body>
 </html>
