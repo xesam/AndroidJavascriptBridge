@@ -24,7 +24,7 @@ public class JavascriptBridge {
     }
 
     private void log(String string) {
-        Log.e(this.getClass().getSimpleName(), string == null ? "null" : string);
+        Log.d(this.getClass().getSimpleName(), string == null ? "null" : string);
     }
 
     public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler<?> requestHandler) {
@@ -33,13 +33,14 @@ public class JavascriptBridge {
 
     @JavascriptInterface
     public void onReceiveCallRequest(String requestString) {
-        log(requestString);
+        log("onReceiveCallRequest:" + requestString);
         LocalCallRequest localCallRequest = new LocalCallRequest(requestString);
         mDispatcher.dispatchLocalRequest(localCallRequest);
     }
 
     @JavascriptInterface
     public void onReceiveCallbackRequest(String requestString) {
+        log("onReceiveCallbackRequest:" + requestString);
         log(requestString);
         LocalCallbackRequest localCallbackRequest = new LocalCallbackRequest(requestString);
         mDispatcher.dispatchLocalRequest(localCallbackRequest);
