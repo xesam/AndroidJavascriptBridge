@@ -97,7 +97,7 @@ window.bridge = (function () {
     }
 
     function LocalCallbackRequest(request) {
-        LocalCallbackRequest.call(this, request);
+        LocalRequest.call(this, request);
         this.callback_method = request['callback_method'];
     }
 
