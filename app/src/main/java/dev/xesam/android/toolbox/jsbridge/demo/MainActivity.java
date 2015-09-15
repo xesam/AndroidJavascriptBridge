@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn3", getData(), null);
                 javascriptBridge.invokeRemoteCall(remoteCallRequest);
-
             }
         });
 

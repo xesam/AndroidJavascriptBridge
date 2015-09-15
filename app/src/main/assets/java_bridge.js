@@ -91,22 +91,13 @@ window.bridge = (function () {
         this.callback_id = request['callback_id'];
     }
 
-    LocalRequest.prototype = {
-        constructor: LocalRequest,
-        is_call: function () {
-            return !!this.request_method;
-        },
-
-        is_callback: function () {
-            return !!this.callback_id;
-        }
-    };
-
     function LocalCallRequest(request) {
+        LocalRequest.call(this, request);
         this.request_method = request['request_method'];
     }
 
     function LocalCallbackRequest(request) {
+        LocalCallbackRequest.call(this, request);
         this.callback_method = request['callback_method'];
     }
 
@@ -129,12 +120,13 @@ window.bridge = (function () {
         },
 
         on_receive_request: function (local_request_string) {
-            log(local_request_string);
             var request = JSON.parse(local_request_string);
             if (request['request_method']) {
+                log("dispatch_local_call_request:" + local_request_string);
                 _dispatcher.dispatch_local_call_request(new LocalCallRequest(request));
             } else {
                 _dispatcher.dispatch_local_callback_request(new LocalCallbackRequest(request));
+                log("dispatch_local_callback_request:" + local_request_string);
             }
         }
     }
