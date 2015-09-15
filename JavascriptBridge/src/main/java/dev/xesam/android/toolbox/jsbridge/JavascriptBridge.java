@@ -53,6 +53,14 @@ public class JavascriptBridge {
         mDispatcher.dispatchRemoteRequest(remoteRequest);
     }
 
+    /**
+     * extra_callback
+     */
+    public void deliveryRemoteCallback(LocalCallRequest localCallRequest, JSONObject requestData) {
+        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getCallbackId(), null, requestData);
+        invokeRemoteCallback(remoteRequest);
+    }
+
     public void deliveryRemoteCallback(LocalCallRequest localCallRequest, String callbackMethod, JSONObject requestData) {
         RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getCallbackId(), callbackMethod, requestData);
         invokeRemoteCallback(remoteRequest);

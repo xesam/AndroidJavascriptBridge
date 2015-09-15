@@ -18,6 +18,10 @@ public class RemoteCallRequest extends RemoteRequest {
     private String requestMethod;
     private RemoteRequestListener remoteRequestListener;
 
+    public RemoteCallRequest(String requestMethod, JSONObject requestData) {
+        this(requestMethod, requestData, null);
+    }
+
     public RemoteCallRequest(String requestMethod, JSONObject requestData, RemoteRequestListener remoteRequestListener) {
         super(requestData);
         this.requestMethod = requestMethod;

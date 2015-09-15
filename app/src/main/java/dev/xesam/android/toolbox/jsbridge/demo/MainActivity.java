@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "java_fn2：" + localCallRequest.getRequestId(), Toast.LENGTH_SHORT).show();
 
                 if (localCallRequest.hasCallback()) {
-                    javascriptBridge.deliveryRemoteCallback(localCallRequest, "succ", getData());
+                    javascriptBridge.deliveryRemoteCallback(localCallRequest, "succ", new Person().getJSONObject());
                 }
             }
         });
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "java_fn3：" + data.name, Toast.LENGTH_SHORT).show();
 
                 if (localCallRequest.hasCallback()) {
-                    javascriptBridge.deliveryRemoteCallback(localCallRequest, null, getData());
+                    javascriptBridge.deliveryRemoteCallback(localCallRequest, new Person().getJSONObject());
                 }
             }
         });
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.js_fn1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn1", getData(), null);
+                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn1", new Person().getJSONObject());
                 javascriptBridge.invokeRemoteCall(remoteCallRequest);
 
             }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.js_fn2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn2", getData(), new RemoteCallRequest.RemoteRequestListener() {
+                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn2", new Person().getJSONObject(), new RemoteCallRequest.RemoteRequestListener() {
                     @Override
                     public void handle(LocalCallbackRequest localRequest) {
                         Toast.makeText(getApplicationContext(), localRequest.getCallbackData().toString(), Toast.LENGTH_SHORT).show();
@@ -108,22 +108,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.js_fn3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn3", getData(), null);
+                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn3", new Person().getJSONObject(), null);
                 javascriptBridge.invokeRemoteCall(remoteCallRequest);
             }
         });
 
-    }
-
-    public JSONObject getData() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("name", "[xesam]java call js");
-            jsonObject.put("blog", "https://github.com/xesam");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject;
     }
 }
 
@@ -131,8 +120,19 @@ class Person {
     String name;
     String blog;
 
-    public Person(String name, String blog) {
-        this.name = name;
-        this.blog = blog;
+    public Person() {
+        this.name = "[xesam]java call js";
+        this.blog = "https://github.com/xesam";
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", name);
+            jsonObject.put("blog", blog);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }
