@@ -8,8 +8,8 @@ import org.json.JSONObject;
  */
 public class RemoteCallbackRequest extends RemoteRequest {
 
-    public static final String CALLBACK_ID = "_callback_id";
-    public static final String CALLBACK_METHOD = "_callback_method";
+    public static final String CALLBACK_ID = "callback_id";
+    public static final String CALLBACK_METHOD = "callback_method";
 
     private long callbackId;
     private String callbackMethod;

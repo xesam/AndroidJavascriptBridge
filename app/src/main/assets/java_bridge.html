@@ -72,8 +72,7 @@
     });
 
     bridge.register_local_request_handler('js_fn2', function (data, callback_id) {
-        log("js_fn2:" + data.name);
-        log("js_fn2:" + callback_id);
+        log("js_fn1:" + data.name);
         if (callback_id) {
             bridge.invoke_remote_callback(callback_id, {"src": "from js_fn2"});
         }

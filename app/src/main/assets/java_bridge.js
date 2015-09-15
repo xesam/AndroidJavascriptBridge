@@ -16,42 +16,43 @@ window.bridge = (function () {
             this._local_handlers[request_method] = request_handler;
         },
 
-        dispatch_remote_request: function (remote_request) {
-            this._remote_callback[remote_request.request_id] = remote_request;
-            JavaBridge.onReceiveRequest(remote_request.getJsonString());
+        dispatch_remote_call_request: function (remote_call_request) {
+            this._remote_callback[remote_call_request.request_id] = remote_call_request;
+            JavaBridge.onReceiveCallRequest(remote_call_request.getJsonString());
         },
 
-        dispatch_local_request: function (local_request) {
+        dispatch_remote_callback_request: function (remote_callback_request) {
+            JavaBridge.onReceiveCallbackRequest(remote_callback_request.getJsonString());
+        },
+
+        dispatch_local_call_request: function (local_call_request) {
+            var call = this._local_handlers[local_call_request.request_method] || window[local_call_request.request_method];
+            if (call) {
+                setTimeout(function () {
+                    call(local_call_request.request_data, !!local_call_request.callback_id ? local_call_request.callback_id : undefined);
+                }, 0);
+            }
+        },
+
+        dispatch_local_callback_request: function (local_callback_request) {
             var _this = this;
-            if (local_request.is_call()) {
-                var call = this._local_handlers[local_request.request_method] || window[local_request.request_method];
-                if (call) {
+            var callback_id = local_callback_request.callback_id;
+            var cache_request = this._remote_callback[callback_id];
+            if (cache_request) {
+                var callback;
+                if (local_callback_request.callback_method) {
+                    callback = cache_request.data[local_callback_request.callback_method];
+                } else {
+                    callback = cache_request.data.extra_callback;
+                }
+                if (callback) {
                     setTimeout(function () {
-                        call(local_request.request_data, local_request.has_callback ? local_request.callback_id : undefined);
-                    }, 0);
-                }
-            } else if (local_request.is_callback()) {
-
-                var callback_id = local_request.callback_id;
-
-                var cache_request = this._remote_callback[callback_id];
-                if (cache_request) {
-                    var callback;
-                    if (local_request.callback_method) {
-                        callback = cache_request.data[local_request.callback_method];
-                    } else {
-                        callback = cache_request.data.extra_callback;
-                    }
-                    if (callback) {
-                        setTimeout(function () {
-                            callback(local_request.request_data);
-                            delete _this._remote_callback[callback_id];
-                        }, 0);
-                    } else {
+                        callback(local_callback_request.request_data);
                         delete _this._remote_callback[callback_id];
-                    }
+                    }, 0);
+                } else {
+                    delete _this._remote_callback[callback_id];
                 }
-
             }
         }
     };
@@ -67,38 +68,24 @@ window.bridge = (function () {
         };
     }
 
-    RemoteRequest.TYPE_CALL = 1;
-    RemoteRequest.TYPE_CALLBACK = 1;
-
     function RemoteCallRequest(remote_method, remote_data, has_data_callback, extra_callback) {
         RemoteRequest.call(this, remote_data);
-
-        this.data['request_type'] = RemoteRequest.TYPE_CALL;
         this.data['request_method'] = remote_method;
         this.data['extra_callback'] = extra_callback;
         this.data['has_callback'] = has_data_callback || !!extra_callback;
     }
 
-    function RemoteCallbackRequest(remote_data, remote_callback_id) {
+    function RemoteCallbackRequest(remote_callback_id, remote_data) {
         RemoteRequest.call(this, remote_data);
-
-        this.data['request_type'] = RemoteRequest.TYPE_CALLBACK;
         this.data['callback_id'] = remote_callback_id;
     }
 
     /******************** Local Call ************************/
 
-    function LocalRequest(request_string) {
-        var request = JSON.parse(request_string);
+    function LocalRequest(request) {
         this.request_id = request['request_id'];
-
-        this.request_method = request['request_method'];
         this.request_data = request['request_data'];
-        this.has_callback = request['has_callback'];
         this.callback_id = request['callback_id'];
-
-        this.callback_method = request['_callback_method'];
-
     }
 
     LocalRequest.prototype = {
@@ -112,6 +99,14 @@ window.bridge = (function () {
         }
     };
 
+    function LocalCallRequest(request) {
+        this.request_method = request['request_method'];
+    }
+
+    function LocalCallbackRequest(request) {
+        this.callback_method = request['callback_method'];
+    }
+
     var _dispatcher = new Dispatcher();
 
     return {
@@ -121,18 +116,23 @@ window.bridge = (function () {
         },
 
         invoke_remote_call: function (remote_method, remote_data, has_data_callback, extra_callback) {
-            var remoteRequest = new RemoteCallRequest(remote_method, remote_data, has_data_callback, extra_callback);
-            _dispatcher.dispatch_remote_request(remoteRequest);
+            var remoteRequest = new RemoteCallRequest(remote_method, remote_data, !!has_data_callback, extra_callback);
+            _dispatcher.dispatch_remote_call_request(remoteRequest);
         },
 
         invoke_remote_callback: function (remote_callback_id, remote_data) {
             var remoteRequest = new RemoteCallbackRequest(remote_callback_id, remote_data);
-            _dispatcher.dispatch_remote_request(remoteRequest);
+            _dispatcher.dispatch_remote_callback_request(remoteRequest);
         },
 
         on_receive_request: function (local_request_string) {
-            var local_request = new LocalRequest(local_request_string);
-            _dispatcher.dispatch_local_request(local_request);
+            log(local_request_string);
+            var request = JSON.parse(local_request_string);
+            if (request['request_method']) {
+                _dispatcher.dispatch_local_call_request(new LocalCallRequest(request));
+            } else {
+                _dispatcher.dispatch_local_callback_request(new LocalCallbackRequest(request));
+            }
         }
     }
 })();

@@ -38,4 +38,8 @@ public class LocalCallRequest extends LocalRequest {
     public boolean hasCallback() {
         return callback;
     }
+
+    public long getCallbackId() {
+        return getRequestId();
+    }
 }

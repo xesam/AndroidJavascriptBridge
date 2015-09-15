@@ -13,7 +13,6 @@ public class RemoteCallRequest extends RemoteRequest {
     }
 
     public static final String REQUEST_METHOD = "request_method";
-    public static final String REQUEST_HAS_CALLBACK = "has_callback";
     public static final String REQUEST_CALLBACK_ID = "callback_id";
 
     private String requestMethod;
@@ -39,7 +38,6 @@ public class RemoteCallRequest extends RemoteRequest {
         jsonObject.put(REQUEST_DATA, requestData);
 
         if (remoteRequestListener != null) {
-            jsonObject.put(REQUEST_HAS_CALLBACK, true);
             jsonObject.put(REQUEST_CALLBACK_ID, getRequestId());
 
         }

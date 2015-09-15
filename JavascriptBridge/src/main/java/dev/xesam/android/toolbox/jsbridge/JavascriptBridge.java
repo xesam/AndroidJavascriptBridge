@@ -36,31 +36,29 @@ public class JavascriptBridge {
     }
 
     @JavascriptInterface
-    public void onReceiveRequest(String requestString) {
+    public void onReceiveCallRequest(String requestString) {
         log(requestString);
-        int requestType = LocalRequest.getType(requestString);
-        switch (requestType) {
-            case LocalRequest.TYPE_CALL:
-                LocalCallRequest localCallRequest = new LocalCallRequest(requestString);
-                mDispatcher.dispatchLocalRequest(localCallRequest);
-                break;
-            case LocalRequest.TYPE_CALLBACK:
-                LocalCallbackRequest localCallbackRequest = new LocalCallbackRequest(requestString);
-                mDispatcher.dispatchLocalRequest(localCallbackRequest);
-                break;
-        }
+        LocalCallRequest localCallRequest = new LocalCallRequest(requestString);
+        mDispatcher.dispatchLocalRequest(localCallRequest);
+    }
+
+    @JavascriptInterface
+    public void onReceiveCallbackRequest(String requestString) {
+        log(requestString);
+        LocalCallbackRequest localCallbackRequest = new LocalCallbackRequest(requestString);
+        mDispatcher.dispatchLocalRequest(localCallbackRequest);
     }
 
     public void invokeRemoteCall(RemoteCallRequest remoteRequest) {
         mDispatcher.dispatchRemoteRequest(remoteRequest);
     }
 
-    public void deliveryRemoteCallback(LocalCallRequest localCallRequest, String callbackMethod, JSONObject requestData) {
-        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getRequestId(), callbackMethod, requestData, null);
-        invokeRemoteCallback(remoteRequest);
-    }
-
     public void invokeRemoteCallback(RemoteCallbackRequest remoteRequest) {
         mDispatcher.dispatchRemoteRequest(remoteRequest);
+    }
+
+    public void deliveryRemoteCallback(LocalCallRequest localCallRequest, String callbackMethod, JSONObject requestData) {
+        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getCallbackId(), callbackMethod, requestData, null);
+        invokeRemoteCallback(remoteRequest);
     }
 }
