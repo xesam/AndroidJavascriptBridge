@@ -13,18 +13,18 @@
     <title></title>
     <style>
         html,body{
-            width : 100%;
+        width : 100%;
         }
 
         div {
-            height: 40px;
-            text-align: center;
+        height: 40px;
+        text-align: center;
         }
 
         div > button {
-            width: 50%;
-            height: 30px;
-            font-size: 16px;
+        width: 50%;
+        height: 30px;
+        font-size: 16px;
         }
     </style>
     <script src="java_bridge.js"></script>
@@ -80,22 +80,22 @@
     }, false);
 
     bridge.register_local_request_handler('js_fn1', function (data, callback_id) {
-        log("js_fn1:");
+        log("js_fn1:java call js[js_fn1]");
     });
 
     bridge.register_local_request_handler('js_fn2', function (data, callback_id) {
-        log("js_fn1:" + data.name);
+        log("js_fn2:" + data.name);
         if (callback_id) {
             bridge.invoke_remote_callback(callback_id, {"src": "from js_fn2"});
         }
     });
 
     bridge.register_local_request_handler('js_fn3', function (data, callback_id) {
+        log("js_fn3:" + data.name);
         bridge.invoke_remote_call('java_fn1', {
-            name: data.name
+            name: "js call java"
         });
     });
-
 </script>
 </body>
 </html>

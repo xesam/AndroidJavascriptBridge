@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn2", getData(), new RemoteCallRequest.RemoteRequestListener() {
                     @Override
                     public void handle(LocalCallbackRequest localRequest) {
-                        Toast.makeText(getApplicationContext(), localRequest.getRequestString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), localRequest.getCallbackData().toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 javascriptBridge.invokeRemoteCall(remoteCallRequest);
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     public JSONObject getData() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("name", "xesam");
+            jsonObject.put("name", "[xesam]java call js");
             jsonObject.put("blog", "https://github.com/xesam");
         } catch (JSONException e) {
             e.printStackTrace();
