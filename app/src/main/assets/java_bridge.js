@@ -27,32 +27,36 @@ window.bridge = (function () {
                 var call = this._local_handlers[local_request.request_method] || window[local_request.request_method];
                 if (call) {
                     setTimeout(function () {
-                        call(local_request.request_data);
+                        call(local_request.request_data, local_request.has_callback ? local_request.callback_id : undefined);
                     }, 0);
                 }
             } else if (local_request.is_callback()) {
-                var cache_request = this._remote_callback[local_request.callback_id];
+
+                var callback_id = local_request.callback_id;
+
+                var cache_request = this._remote_callback[callback_id];
                 if (cache_request) {
                     var callback;
-                    if(local_request.callback_method){
+                    if (local_request.callback_method) {
                         callback = cache_request.data[local_request.callback_method];
-                    }else{
+                    } else {
                         callback = cache_request.data.extra_callback;
                     }
                     if (callback) {
                         setTimeout(function () {
                             callback(local_request.request_data);
-                            delete _this._remote_callback[local_request.callback_id];
+                            delete _this._remote_callback[callback_id];
                         }, 0);
+                    } else {
+                        delete _this._remote_callback[callback_id];
                     }
-
                 }
 
             }
         }
     };
 
-    /********************************************/
+    /******************** Remote Call ************************/
 
     function RemoteRequest(remote_data) {
         this.request_id = new Date().getTime();
@@ -75,16 +79,14 @@ window.bridge = (function () {
         this.data['has_callback'] = has_data_callback || !!extra_callback;
     }
 
-    RemoteCallRequest.prototype = RemoteRequest.prototype;
-
     function RemoteCallbackRequest(remote_data, remote_callback_id) {
         RemoteRequest.call(this, remote_data);
 
         this.data['request_type'] = RemoteRequest.TYPE_CALLBACK;
-        this.data['remote_callback_id'] = remote_callback_id;
+        this.data['callback_id'] = remote_callback_id;
     }
 
-    /********************************************/
+    /******************** Local Call ************************/
 
     function LocalRequest(request_string) {
         var request = JSON.parse(request_string);
@@ -92,9 +94,11 @@ window.bridge = (function () {
 
         this.request_method = request['request_method'];
         this.request_data = request['request_data'];
+        this.has_callback = request['has_callback'];
+        this.callback_id = request['callback_id'];
 
-        this.callback_id = request['_callback_id'];
         this.callback_method = request['_callback_method'];
+
     }
 
     LocalRequest.prototype = {
@@ -121,8 +125,8 @@ window.bridge = (function () {
             _dispatcher.dispatch_remote_request(remoteRequest);
         },
 
-        invoke_remote_callback: function (remote_data, remote_callback_id) {
-            var remoteRequest = new RemoteCallbackRequest(remote_data, remote_callback_id);
+        invoke_remote_callback: function (remote_callback_id, remote_data) {
+            var remoteRequest = new RemoteCallbackRequest(remote_callback_id, remote_data);
             _dispatcher.dispatch_remote_request(remoteRequest);
         },
 

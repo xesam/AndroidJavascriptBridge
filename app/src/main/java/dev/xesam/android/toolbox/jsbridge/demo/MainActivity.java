@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn2", getData(), new RemoteCallRequest.RemoteRequestListener() {
                     @Override
                     public void handle(LocalCallbackRequest localRequest) {
-
+                        Toast.makeText(getApplicationContext(), localRequest.getRequestString(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 javascriptBridge.invokeRemoteCall(remoteCallRequest);
