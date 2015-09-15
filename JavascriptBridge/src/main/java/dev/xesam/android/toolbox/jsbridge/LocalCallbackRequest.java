@@ -9,8 +9,10 @@ import org.json.JSONObject;
 public class LocalCallbackRequest extends LocalRequest {
 
     public static final String CALLBACK_ID = "callback_id";
+    public static final String CALLBACK_DATA = "callback_data";
 
     private long callbackId;
+    private JSONObject callbackData;
 
     public LocalCallbackRequest(String remoteRequestString) {
         super(remoteRequestString);
@@ -19,9 +21,14 @@ public class LocalCallbackRequest extends LocalRequest {
     @Override
     protected void parseRemoteExtra(String remoteRequestString, JSONObject jsonObject) throws JSONException {
         callbackId = jsonObject.getLong(CALLBACK_ID);
+        callbackData = jsonObject.getJSONObject(CALLBACK_DATA);
     }
 
     public long getCallbackId() {
         return callbackId;
+    }
+
+    public JSONObject getCallbackData() {
+        return callbackData;
     }
 }

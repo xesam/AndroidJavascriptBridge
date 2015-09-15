@@ -59,25 +59,28 @@ window.bridge = (function () {
 
     /******************** Remote Call ************************/
 
-    function RemoteRequest(remote_data) {
+    function RemoteRequest() {
         this.request_id = new Date().getTime();
-        this.data = remote_data;
-        this.data['request_id'] = this.request_id;
         this.getJsonString = function () {
             return JSON.stringify(this.data);
         };
     }
 
     function RemoteCallRequest(remote_method, remote_data, has_data_callback, extra_callback) {
-        RemoteRequest.call(this, remote_data);
+        RemoteRequest.call(this);
+        this.data = remote_data;
+        this.data['request_id'] = this.request_id;
         this.data['request_method'] = remote_method;
         this.data['extra_callback'] = extra_callback;
         this.data['has_callback'] = has_data_callback || !!extra_callback;
     }
 
     function RemoteCallbackRequest(remote_callback_id, remote_data) {
-        RemoteRequest.call(this, remote_data);
+        RemoteRequest.call(this);
+        this.data = {};
+        this.data['request_id'] = this.request_id;
         this.data['callback_id'] = remote_callback_id;
+        this.data['callback_data'] = remote_data;
     }
 
     /******************** Local Call ************************/
