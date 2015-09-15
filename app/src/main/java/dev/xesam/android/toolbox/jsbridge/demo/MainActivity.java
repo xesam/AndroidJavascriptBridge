@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
         webView = (WebView) findViewById(R.id.wv);
         webView.getSettings().setJavaScriptEnabled(true);
 
-        final JavascriptBridge javascriptBridge = new JavascriptBridge();
-        javascriptBridge.bindWebView(webView);
+        final JavascriptBridge javascriptBridge = new JavascriptBridge(webView);
 
         javascriptBridge.registerLocalRequestHandler("java_fn1", new LocalCallRequest.RequestHandler<Person>() {
             @Override

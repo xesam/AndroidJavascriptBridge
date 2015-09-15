@@ -16,19 +16,15 @@ public class JavascriptBridge {
 
     private Dispatcher mDispatcher;
 
-    public JavascriptBridge() {
-
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
+    public JavascriptBridge(WebView webView) {
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(this, JavascriptBridge.JAVA_BRIDGE);
+        mDispatcher = new Dispatcher(webView);
     }
 
     private void log(String string) {
         Log.e(this.getClass().getSimpleName(), string == null ? "null" : string);
-    }
-
-    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
-    public void bindWebView(WebView webView) {
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(this, JavascriptBridge.JAVA_BRIDGE);
-        mDispatcher = new Dispatcher(webView);
     }
 
     public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler<?> requestHandler) {
