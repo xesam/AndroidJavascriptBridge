@@ -16,7 +16,6 @@ import java.util.Map;
  */
 public class Dispatcher {
 
-    long sequence = 0;
     private WebView mWebView;
     private Handler invokeHandler = new Handler(Looper.getMainLooper());
 
@@ -49,9 +48,8 @@ public class Dispatcher {
     }
 
     public void dispatchRemoteRequest(RemoteCallRequest remoteRequest) {
-        sequence++;
         if (remoteRequest.getRemoteRequestListener() != null) {
-            remoteRequestListeners.put(sequence, remoteRequest.getRemoteRequestListener());
+            remoteRequestListeners.put(remoteRequest.getRequestId(), remoteRequest.getRemoteRequestListener());
         }
         evaluateJavascript(remoteRequest);
     }

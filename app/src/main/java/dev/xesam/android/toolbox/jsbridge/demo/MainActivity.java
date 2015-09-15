@@ -3,6 +3,7 @@ package dev.xesam.android.toolbox.jsbridge.demo;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import org.json.JSONObject;
 
 import dev.xesam.android.toolbox.jsbridge.JavascriptBridge;
 import dev.xesam.android.toolbox.jsbridge.LocalCallRequest;
+import dev.xesam.android.toolbox.jsbridge.LocalCallbackRequest;
+import dev.xesam.android.toolbox.jsbridge.RemoteCallRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +83,37 @@ public class MainActivity extends AppCompatActivity {
         });
 
         webView.loadUrl("file:///android_asset/java_bridge.html");
+
+        findViewById(R.id.js_fn1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn1", getData(), null);
+                javascriptBridge.invokeRemoteCall(remoteCallRequest);
+
+            }
+        });
+
+        findViewById(R.id.js_fn2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn2", getData(), new RemoteCallRequest.RemoteRequestListener() {
+                    @Override
+                    public void handle(LocalCallbackRequest localRequest) {
+
+                    }
+                });
+                javascriptBridge.invokeRemoteCall(remoteCallRequest);
+            }
+        });
+
+        findViewById(R.id.js_fn3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RemoteCallRequest remoteCallRequest = new RemoteCallRequest("js_fn3", getData(), null);
+                javascriptBridge.invokeRemoteCall(remoteCallRequest);
+
+            }
+        });
 
     }
 
