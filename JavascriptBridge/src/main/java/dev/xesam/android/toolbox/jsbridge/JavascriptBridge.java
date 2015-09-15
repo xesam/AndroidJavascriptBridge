@@ -58,7 +58,7 @@ public class JavascriptBridge {
     }
 
     public void deliveryRemoteCallback(LocalCallRequest localCallRequest, String callbackMethod, JSONObject requestData) {
-        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getCallbackId(), callbackMethod, requestData, null);
+        RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getCallbackId(), callbackMethod, requestData);
         invokeRemoteCallback(remoteRequest);
     }
 }

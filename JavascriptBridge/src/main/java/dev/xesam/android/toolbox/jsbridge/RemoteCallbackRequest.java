@@ -14,7 +14,7 @@ public class RemoteCallbackRequest extends RemoteRequest {
     private long callbackId;
     private String callbackMethod;
 
-    public RemoteCallbackRequest(long callbackId, String callbackMethod, JSONObject requestData, RemoteCallRequest.RemoteRequestListener remoteRequestListener) {
+    public RemoteCallbackRequest(long callbackId, String callbackMethod, JSONObject requestData) {
         super(requestData);
         this.callbackId = callbackId;
         this.callbackMethod = callbackMethod;
