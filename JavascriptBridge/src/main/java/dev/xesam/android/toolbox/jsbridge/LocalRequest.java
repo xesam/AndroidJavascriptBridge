@@ -18,7 +18,7 @@ public abstract class LocalRequest {
     protected LocalRequest(String remoteRequestString) {
         requestString = remoteRequestString;
         try {
-            JSONObject requestData = new JSONObject(remoteRequestString);
+            requestData = new JSONObject(remoteRequestString);
             requestId = requestData.getLong(REQUEST_ID);
             parseRequestData(remoteRequestString, requestData);
         } catch (JSONException e) {
