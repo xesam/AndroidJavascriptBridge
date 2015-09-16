@@ -9,16 +9,18 @@ import org.json.JSONObject;
 public abstract class LocalRequest {
 
     public static final String REQUEST_ID = "request_id";
+    public static final String REQUEST_DATA = "request_data";
 
     private final String requestString;
     private long requestId;
+    private JSONObject requestData;
 
     protected LocalRequest(String remoteRequestString) {
         requestString = remoteRequestString;
         try {
-            JSONObject rawJsonObject = new JSONObject(remoteRequestString);
-            requestId = rawJsonObject.getLong(REQUEST_ID);
-            parseRemoteExtra(remoteRequestString, rawJsonObject);
+            JSONObject requestData = new JSONObject(remoteRequestString);
+            requestId = requestData.getLong(REQUEST_ID);
+            parseRequestData(remoteRequestString, requestData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -32,7 +34,11 @@ public abstract class LocalRequest {
         return requestId;
     }
 
-    protected void parseRemoteExtra(String remoteRequestString, JSONObject jsonObject) throws JSONException {
+    public JSONObject getRequestData() {
+        return requestData;
+    }
+
+    protected void parseRequestData(String requestString, JSONObject jsonObject) throws JSONException {
 
     }
 

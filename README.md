@@ -49,15 +49,11 @@ js：
 java:
 
     final JavascriptBridge javascriptBridge = new JavascriptBridge(webView);
-    javascriptBridge.registerLocalRequestHandler("java_fn1", new LocalCallRequest.RequestHandler<Person>() {
-        @Override
-        public Person formJson(String requestString) {
-            Gson gson = new Gson();
-            return gson.fromJson(requestString, Person.class);
-        }
-
+    javascriptBridge.registerLocalRequestHandler("java_fn1", new LocalCallRequest.RequestHandler() {
         @Override
         public void handle(LocalCallRequest localCallRequest, Person data) {
+            Gson gson = new Gson();
+            Person data = gson.fromJson(requestString, Person.class);
             Toast.makeText(getApplicationContext(), data.name, Toast.LENGTH_SHORT).show();
             if (localCallRequest.hasCallback()) {
                 javascriptBridge.deliveryRemoteCallback(localCallRequest, "succ", new Person().getJSONObject());

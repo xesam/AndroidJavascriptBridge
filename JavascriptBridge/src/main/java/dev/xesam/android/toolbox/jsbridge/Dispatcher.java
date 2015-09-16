@@ -25,9 +25,9 @@ public class Dispatcher {
 
     private Map<Long, RemoteCallRequest.RemoteRequestListener> remoteRequestListeners = new HashMap<>();
 
-    private Map<String, LocalCallRequest.RequestHandler<?>> handlers = new HashMap<>();
+    private Map<String, LocalCallRequest.RequestHandler> handlers = new HashMap<>();
 
-    public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler<?> requestHandler) {
+    public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler requestHandler) {
         handlers.put(requestMethod, requestHandler);
     }
 
@@ -35,7 +35,7 @@ public class Dispatcher {
         String requestMethod = localRequest.getRequestMethod();
         if (handlers.containsKey(requestMethod)) {
             LocalCallRequest.RequestHandler handler = handlers.get(requestMethod);
-            handler.handle(localRequest, handler.formJson(localRequest.getRequestString()));
+            handler.handle(localRequest);
         }
     }
 

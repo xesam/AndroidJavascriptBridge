@@ -31,28 +31,19 @@ public class MainActivity extends AppCompatActivity {
 
         final JavascriptBridge javascriptBridge = new JavascriptBridge(webView);
 
-        javascriptBridge.registerLocalRequestHandler("java_fn1", new LocalCallRequest.RequestHandler<Person>() {
+        javascriptBridge.registerLocalRequestHandler("java_fn1", new LocalCallRequest.RequestHandler() {
             @Override
-            public Person formJson(String requestString) {
+            public void handle(LocalCallRequest localCallRequest) {
                 Gson gson = new Gson();
-                return gson.fromJson(requestString, Person.class);
-            }
-
-            @Override
-            public void handle(LocalCallRequest localCallRequest, Person data) {
+                Person data = gson.fromJson(localCallRequest.getRequestString(), Person.class);
                 Toast.makeText(getApplicationContext(), data.name, Toast.LENGTH_SHORT).show();
             }
         });
 
-        javascriptBridge.registerLocalRequestHandler("java_fn2", new LocalCallRequest.RequestHandler<Person>() {
+        javascriptBridge.registerLocalRequestHandler("java_fn2", new LocalCallRequest.RequestHandler() {
 
             @Override
-            public Person formJson(String requestString) {
-                return null;
-            }
-
-            @Override
-            public void handle(LocalCallRequest localCallRequest, Person data) {
+            public void handle(LocalCallRequest localCallRequest) {
 
                 Toast.makeText(getApplicationContext(), "java_fn2：" + localCallRequest.getRequestId(), Toast.LENGTH_SHORT).show();
 
@@ -62,17 +53,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        javascriptBridge.registerLocalRequestHandler("java_fn3", new LocalCallRequest.RequestHandler<Person>() {
+        javascriptBridge.registerLocalRequestHandler("java_fn3", new LocalCallRequest.RequestHandler() {
 
             @Override
-            public Person formJson(String requestString) {
+            public void handle(LocalCallRequest localCallRequest) {
                 Gson gson = new Gson();
-                return gson.fromJson(requestString, Person.class);
-            }
-
-            @Override
-            public void handle(LocalCallRequest localCallRequest, Person data) {
-
+                Person data = gson.fromJson(localCallRequest.getRequestString(), Person.class);
                 Toast.makeText(getApplicationContext(), "java_fn3：" + data.name, Toast.LENGTH_SHORT).show();
 
                 if (localCallRequest.hasCallback()) {

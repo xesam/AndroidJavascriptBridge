@@ -8,11 +8,8 @@ import org.json.JSONObject;
  */
 public class LocalCallRequest extends LocalRequest {
 
-    public interface RequestHandler<T> {
-
-        T formJson(String requestString);
-
-        void handle(LocalCallRequest localCallRequest, T data);
+    public interface RequestHandler {
+        void handle(LocalCallRequest localCallRequest);
     }
 
     public static final String REQUEST_METHOD = "request_method";
@@ -26,7 +23,7 @@ public class LocalCallRequest extends LocalRequest {
     }
 
     @Override
-    protected void parseRemoteExtra(String remoteRequestString, JSONObject jsonObject) throws JSONException {
+    protected void parseRequestData(String remoteRequestString, JSONObject jsonObject) throws JSONException {
         requestMethod = jsonObject.getString(REQUEST_METHOD);
         callback = jsonObject.getBoolean(HAS_CALLBACK);
     }

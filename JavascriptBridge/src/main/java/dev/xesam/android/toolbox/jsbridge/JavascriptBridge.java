@@ -27,7 +27,7 @@ public class JavascriptBridge {
         Log.d(this.getClass().getSimpleName(), string == null ? "null" : string);
     }
 
-    public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler<?> requestHandler) {
+    public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler requestHandler) {
         mDispatcher.registerLocalRequestHandler(requestMethod, requestHandler);
     }
 
