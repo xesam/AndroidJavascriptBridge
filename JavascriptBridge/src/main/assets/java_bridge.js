@@ -68,7 +68,7 @@ window.bridge = (function () {
 
     function RemoteCallRequest(remote_method, remote_data, has_data_callback, extra_callback) {
         RemoteRequest.call(this);
-        this.data = remote_data;
+        this.data = remote_data || {};
         this.data['request_id'] = this.request_id;
         this.data['request_method'] = remote_method;
         this.data['extra_callback'] = extra_callback;
