@@ -119,7 +119,16 @@ java:
 
 ![demo.png](./demo.png)
 
+##修改日志
+
+###20150917
+
+1. 将 bridge.js 直接注入到 webview 中，无需js显式引入
+2.
+
 ##Android分享 Q群：315658668
+
+
 
 
 

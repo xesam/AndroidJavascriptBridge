@@ -3,7 +3,6 @@ package dev.xesam.android.toolbox.jsbridge;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
@@ -64,7 +63,7 @@ public class Dispatcher {
             public void run() {
 
                 String script = String.format(Locale.getDefault(), "window.bridge.on_receive_request('%s')", remoteRequest.toJSONString());
-                Log.e("script", script);
+                L.log("script", script);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     mWebView.evaluateJavascript(script, new ValueCallback<String>() {
                         @Override

@@ -122,11 +122,9 @@ window.bridge = (function () {
         on_receive_request: function (local_request_string) {
             var request = JSON.parse(local_request_string);
             if (request['request_method']) {
-                log("dispatch_local_call_request");
                 _dispatcher.dispatch_local_call_request(new LocalCallRequest(request));
             } else {
                 _dispatcher.dispatch_local_callback_request(new LocalCallbackRequest(request));
-                log("dispatch_local_callback_request");
             }
         }
     }

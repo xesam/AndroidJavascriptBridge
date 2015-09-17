@@ -1,7 +1,6 @@
 package dev.xesam.android.toolbox.jsbridge;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -23,25 +22,20 @@ public class JavascriptBridge {
         mDispatcher = new Dispatcher(webView);
     }
 
-    private void log(String string) {
-        Log.d(this.getClass().getSimpleName(), string == null ? "null" : string);
-    }
-
     public void registerLocalRequestHandler(String requestMethod, LocalCallRequest.RequestHandler requestHandler) {
         mDispatcher.registerLocalRequestHandler(requestMethod, requestHandler);
     }
 
     @JavascriptInterface
     public void onReceiveCallRequest(String requestString) {
-        log("onReceiveCallRequest:" + requestString);
+        L.log("onReceiveCallRequest", requestString);
         LocalCallRequest localCallRequest = new LocalCallRequest(requestString);
         mDispatcher.dispatchLocalRequest(localCallRequest);
     }
 
     @JavascriptInterface
     public void onReceiveCallbackRequest(String requestString) {
-        log("onReceiveCallbackRequest:" + requestString);
-        log(requestString);
+        L.log("onReceiveCallbackRequest", requestString);
         LocalCallbackRequest localCallbackRequest = new LocalCallbackRequest(requestString);
         mDispatcher.dispatchLocalRequest(localCallbackRequest);
     }
