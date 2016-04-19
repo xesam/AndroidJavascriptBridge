@@ -1,3 +1,8 @@
+Deprecated
+
+please see [JsBridge](https://github.com/xesam/JsBridge)
+
+
 #AndroidJavascriptBridge
 
 Java 与 Js 互调封装 [AndroidJavascriptBridge](https://github.com/xesam/AndroidJavascriptBridge)
