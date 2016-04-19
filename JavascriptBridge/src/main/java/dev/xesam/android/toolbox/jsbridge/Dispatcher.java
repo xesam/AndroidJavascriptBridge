@@ -78,4 +78,9 @@ public class Dispatcher {
             }
         });
     }
+
+    public final void destroy() {
+        invokeHandler.removeCallbacksAndMessages(null);
+        remoteRequestListeners.clear();
+    }
 }

@@ -60,4 +60,8 @@ public class JavascriptBridge {
         RemoteCallbackRequest remoteRequest = new RemoteCallbackRequest(localCallRequest.getCallbackId(), callbackMethod, requestData);
         invokeRemoteCallback(remoteRequest);
     }
+
+    public final void destroy() {
+        mDispatcher.destroy();
+    }
 }
