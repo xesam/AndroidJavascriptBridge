@@ -1,7 +1,6 @@
-Deprecated
+# Deprecated
 
 please see [JsBridge](https://github.com/xesam/JsBridge)
-
 
 # AndroidJavascriptBridge
 
