@@ -3,12 +3,12 @@ Deprecated
 please see [JsBridge](https://github.com/xesam/JsBridge)
 
 
-#AndroidJavascriptBridge
+# AndroidJavascriptBridge
 
 Java 与 Js 互调封装 [AndroidJavascriptBridge](https://github.com/xesam/AndroidJavascriptBridge)
 
-#JS 调用 Java
-##Js 简单调用
+# JS 调用 Java
+## Js 简单调用
 
 这个比较常见，适用于同步，没有回调的情况
 
@@ -26,7 +26,7 @@ js：
 
     Java.java_fn();
 
-##Js 回调
+## Js 回调
 两种形式
 
     js.call({
@@ -49,7 +49,7 @@ js：
 
 如此可以嵌套调用下去。一个完整的封装实现：[AndroidJavascriptBridge](https://github.com/xesam/AndroidJavascriptBridge)
 
-###使用示例
+### 使用示例
 
 java:
 
@@ -79,9 +79,9 @@ js:
     }, false);
 
 
-#Java 调用 Js
+# Java 调用 Js
 
-##Java 简单调用
+## Java 简单调用
 
 KitKat 之后可以使用 evaluateJavascript。其他择可以使用传统的 WebView.loadUrl
 
@@ -96,11 +96,11 @@ KitKat 之后可以使用 evaluateJavascript。其他择可以使用传统的 We
         mWebView.loadUrl("javascript:" + script);
     }
 
-##Java 回调
+## Java 回调
 
 见上图
 
-###使用示例
+### 使用示例
 
 js:
 
@@ -120,18 +120,18 @@ java:
         }
     });
 
-##效果图
+## 效果图
 
 ![demo.png](./demo.png)
 
-##修改日志
+## 修改日志
 
-###20150917
+### 20150917
 
 1. 将 bridge.js 直接注入到 webview 中，无需js显式引入
 2.
 
-##Android分享 Q群：315658668
+## Android分享 Q群：315658668
 
 
 
